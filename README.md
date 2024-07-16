@@ -1,4 +1,4 @@
-# aleo-oper-script
+# shell-batch-tools
 简易运维脚本，方便非专业运维人员批量操作多台linux设备
 
 ## 当前支持功能
@@ -13,7 +13,6 @@
 9. 批量停止aleo服务
 10. 批量配置定时重启aleo任务（每8小时）
 11. 批量删除定时重启aleo任务"
-
 
 ## 使用说明
 * 该脚本需要root账户中操作
@@ -40,3 +39,7 @@ ip,ssh端口号,下载根地址,池子名称,池子账户,worker编号,gpu或cpu
 ```csv
 192.168.1.2,22,http://172.16.1.2,apool,apool_account_name,apool_worker_name,gpu/cpu
 ```
+说明：下载根地址，是指程序所在http服务器的位置，并且服务器程序名称必须按照规则：`aleo-miner-池子名称`来命名，例如：`aleo-miner-apool` 
+
+## 脚本更新说明
+默认脚本是在github托管，因此涉及到的脚本更新、脚本url执行等，默认都是用的github的url地址。如果想自行托管，则需要在脚本修改`SHELL_BASE_URL`，或者环境变量中修改：`export SHELL_BASE_URL=指定链接`  
