@@ -1,0 +1,7 @@
+.idea
+id_rsa
+id_rsa.pub
+*.server
+*.csv
+sslkey
+sshkey
