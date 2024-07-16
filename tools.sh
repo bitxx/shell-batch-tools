@@ -39,7 +39,7 @@ SSH_SERVER_PRIVATE_KEY=$BASE_DIR/id_rsa.server
 SERVER_LIST_ALEO=$BASE_DIR/server_list_aleo.csv
 
 function update_tools_shell() {
-  curl -# -o "$BASE_DIR"/tools.sh "${SHELL_BASE_URL}"tools.sh
+  curl -H "Cache-Control: no-cache" -# -o "$BASE_DIR"/tools.sh "${SHELL_BASE_URL}"tools.sh
   if [ $? -ne 0 ]; then
       echo "脚本更新异常"
       exit 1
