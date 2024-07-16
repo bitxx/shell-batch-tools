@@ -42,4 +42,4 @@ ip,ssh端口号,下载根地址,池子名称,池子账户,worker编号,gpu或cpu
 说明：下载根地址，是指程序所在http服务器的位置，并且服务器程序名称必须按照规则：`aleo-miner-池子名称`来命名，例如：`aleo-miner-apool` 
 
 ## 脚本更新说明
-默认脚本是在github托管，因此涉及到的脚本更新、脚本url执行等，默认都是用的github的url地址。如果想自行托管，则需要在脚本修改`SHELL_BASE_URL`，或者环境变量中修改：`export SHELL_BASE_URL=指定链接`  
+默认脚本是在github托管，因此涉及到的脚本更新、脚本url执行等，默认都是用的github的url地址。如果想自行托管，则需要在`.env`文件中修改`SHELL_BASE_URL`值
