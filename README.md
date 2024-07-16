@@ -1,5 +1,6 @@
 # shell-batch-tools
-简易运维脚本，方便非专业运维人员批量操作多台linux设备
+简易运维脚本，方便非专业运维人员批量操作多台linux设备  
+该脚本在ubuntu 22.04标准服务器版中运行通过
 
 ## 当前支持功能
 1. 新建ssl自有证书(cert.key和cert.pem)
