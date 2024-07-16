@@ -4,6 +4,7 @@
 # >> 追加
 
 # 下载或者更新脚本使用的根路径，先检查本地环境变量是否有配置，没有则读取默认的
+# 地址必须以/结尾
 if [ -z "$SHELL_BASE_URL" ]; then
   SHELL_BASE_URL="https://raw.githubusercontent.com/bitxx/shell-batch-tools/main/"
 fi
@@ -38,7 +39,7 @@ SSH_SERVER_PRIVATE_KEY=$BASE_DIR/id_rsa.server
 SERVER_LIST_ALEO=$BASE_DIR/server_list_aleo.csv
 
 function update_tools_shell() {
-  wget -O "${BASE_DIR}"tools.sh "${SHELL_BASE_URL}"/tools.sh
+  curl -# -o "$BASE_DIR"/tools.sh "${SHELL_BASE_URL}"tools.sh
   if [ $? -ne 0 ]; then
       echo "脚本更新异常"
       exit 1
