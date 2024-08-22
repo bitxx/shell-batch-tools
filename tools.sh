@@ -231,16 +231,15 @@ function batch_aleo() {
     project=$(echo "$server" | cut -d',' -f4)
     accountname=$(echo "$server" | cut -d',' -f5)
     workername=$(echo "$server" | cut -d',' -f6)
-    mode=$(echo "$server" | cut -d',' -f7)
 
     echo "正在操作第${i}行，worker => ${workername}"
 
-    if [ -z "$ip" ] || [ -z "$port" ] || [ -z "$download_url" ] || [ -z "$project" ] || [ -z "$accountname" ] || [ -z "$workername" ] || [ -z "$mode" ] ; then
+    if [ -z "$ip" ] || [ -z "$port" ] || [ -z "$download_url" ] || [ -z "$project" ] || [ -z "$accountname" ] || [ -z "$workername" ] ; then
       echo "解析格式异常"
       continue
     fi
 
-    cmd_install="curl -sSf -L ${SHELL_BASE_URL}/aleo/aleo_install.sh |sudo bash -s -- ${download_url} ${project} ${accountname} ${workername} ${mode}"
+    cmd_install="curl -sSf -L ${SHELL_BASE_URL}/aleo/aleo_install.sh |sudo bash -s -- ${download_url} ${project} ${accountname} ${workername}"
     cmd_uninstall="(if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl disable aleo-miner-${project} && systemctl stop aleo-miner-${project} && rm -f /lib/systemd/system/aleo-miner-${project}.service; fi; if [ -d  /root/aleo/${project}/ ]; then rm -rf /root/aleo/${project}/; fi;) && echo 卸载完毕;"
     cmd_restart="if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl restart aleo-miner-${project}; else echo 服务不存在; fi;"
     cmd_stop="if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl stop aleo-miner-${project}; else echo 服务不存在; fi;"

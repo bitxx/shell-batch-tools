@@ -36,10 +36,10 @@ ip,ssh端口号,新密码
 ```
 
 ### server_list_aleo.csv配置规则
-ip,ssh端口号,下载根地址,池子名称,池子账户,worker编号,gpu或cpu模式  
+ip,ssh端口号,下载根地址,池子名称,池子账户,worker编号
 例如：  
 ```csv
-192.168.1.2,22,http://172.16.1.2,apool,apool_account_name,apool_worker_name,gpu/cpu
+192.168.1.2,22,http://172.16.1.2,apool,apool_account_name,apool_worker_name
 ```
 说明：下载根地址，是指程序所在http服务器的位置，并且服务器程序名称必须按照规则：`aleo-miner-池子名称`来命名，例如：`aleo-miner-apool` 
 

@@ -6,28 +6,16 @@ download_base_url=$1
 project=$2
 accountname=$3
 workername=$4
-mode=$5
 
 case "${project}" in
     "f2pool")
         ;;
-    "zkrush")
+    "oula")
         ;;
     "apool")
         ;;
     *)
         echo "项目输入异常，请重试"
-        exit 1
-        ;;
-esac
-
-case "${mode}" in
-    "gpu")
-        ;;
-    "cpu")
-        ;;
-    *)
-        echo "mode输入异常，请重试"
         exit 1
         ;;
 esac
@@ -88,23 +76,11 @@ function start_f2pool() {
       exit 1
   fi
 
-  case "${mode}" in
-      "gpu")
-          cmd="${BASE_DIR}aleo-miner-${project} -u stratum+tcp://aleo-asia.f2pool.com:4400 -w ${accountname}.${workername} -d 0"
-          start_service "${cmd}"
-          ;;
-      "cpu")
-          cmd="${BASE_DIR}aleo-miner-${project} -u stratum+tcp://aleo-asia.f2pool.com:4400 -w ${accountname}.${workername}"
-          start_service "${cmd}"
-          ;;
-      *)
-          echo "mode输入异常，请重试"
-          exit 1
-          ;;
-  esac
+  cmd="${BASE_DIR}aleo-miner-${project} -u stratum+tcp://aleo-asia.f2pool.com:4400 -w ${accountname}.${workername} -d 0"
+  start_service "${cmd}"
 }
 
-function start_zkrush() {
+function start_oula() {
   # 通过检查其版本来验证节点是否可运行
   echo "版本号：" && "${BASE_DIR}"aleo-miner-"${project}" -v
   if [ $? -ne 0 ]; then
@@ -112,20 +88,8 @@ function start_zkrush() {
       exit 1
   fi
 
-  case "${mode}" in
-      "gpu")
-          echo "zkrush暂不支持gpu模式"
-          exit 1
-          ;;
-      "cpu")
-          cmd="${BASE_DIR}aleo-miner-${project} --pool wss://aleo.zkrush.com:3333 --account ${accountname} --worker-name ${workername}"
-          start_service "${cmd}"
-          ;;
-      *)
-          echo "mode输入异常，请重试"
-          exit 1
-          ;;
-  esac
+  cmd="${BASE_DIR}aleo-miner-${project} --pool wss://aleo.oula.network:6666 --account ${accountname} --worker-name ${workername}"
+  start_service "${cmd}"
 }
 
 function start_apool() {
@@ -136,22 +100,8 @@ function start_apool() {
       exit 1
   fi
 
-  case "${mode}" in
-      "gpu")
-          cmd="${BASE_DIR}aleo-miner-${project} --pool aleo1.hk.apool.io:9090 --account ${accountname} --worker ${workername} -A aleo -g 0"
-          start_service "${cmd}"
-          exit 1
-          ;;
-      "cpu")
-          cmd="${BASE_DIR}aleo-miner-${project} --pool aleo1.hk.apool.io:9090 --gpu-off --account ${accountname} --worker ${workername} -A aleo"
-          start_service "${cmd}"
-          ;;
-      *)
-          echo "mode输入异常，请重试"
-          exit 1
-          ;;
-  esac
-  return
+  cmd="${BASE_DIR}aleo-miner-${project} --pool aleo1.hk.apool.io:9090 --account ${accountname} --worker ${workername} -A aleo -g 0"
+  start_service "${cmd}"
 }
 
 function start_service() {
@@ -187,8 +137,8 @@ Alias=aleo-miner-${project}.service
 case "${project}" in
     "f2pool")
         start_f2pool ;;
-    "zkrush")
-        start_zkrush ;;
+    "oula")
+        start_oula ;;
     "apool")
         start_apool ;;
     *)
