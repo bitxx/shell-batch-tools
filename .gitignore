@@ -5,3 +5,5 @@ id_rsa.pub
 *.csv
 sslkey
 sshkey
+.vscode
+.DS_Store
