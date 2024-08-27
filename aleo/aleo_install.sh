@@ -14,6 +14,8 @@ case "${project}" in
         ;;
     "apool")
         ;;
+    "6block")
+        ;;
     *)
         echo "项目输入异常，请重试"
         exit 1
@@ -92,6 +94,18 @@ function start_oula() {
   start_service "${cmd}"
 }
 
+function start_6block() {
+  # 通过检查其版本来验证节点是否可运行
+  echo "版本号：" && "${BASE_DIR}"aleo-miner-"${project}" -V
+  if [ $? -ne 0 ]; then
+      echo "aleo-miner-${project}程序异常"
+      exit 1
+  fi
+
+  cmd="${BASE_DIR}aleo-miner-${project} --tcp_server 36.189.234.195:10003 --address ${accountname} --custom_name ${workername}"
+  start_service "${cmd}"
+}
+
 function start_apool() {
 # 通过检查其版本来验证节点是否可运行
   echo "版本号：" && "${BASE_DIR}"aleo-miner-"${project}" -V
@@ -141,6 +155,8 @@ case "${project}" in
         start_oula ;;
     "apool")
         start_apool ;;
+    "6block")
+        start_6block ;;
     *)
         ;;
 esac
