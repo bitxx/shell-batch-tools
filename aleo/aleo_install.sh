@@ -102,7 +102,7 @@ function start_6block() {
       exit 1
   fi
 
-  cmd="${BASE_DIR}aleo-miner-${project} --tcp_server 36.189.234.195:10003 --address ${accountname} --custom_name ${workername}"
+  cmd="${BASE_DIR}aleo-miner-${project} --ssl --ssl_server aleo.hk.zk.work:10003 --address ${accountname} --custom_name ${workername}"
   start_service "${cmd}"
 }
 
