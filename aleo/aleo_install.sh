@@ -78,7 +78,7 @@ function start_f2pool() {
       exit 1
   fi
 
-  cmd="${BASE_DIR}aleo-miner-${project} -u stratum+tcp://aleo-asia.f2pool.com:4400 -w ${accountname}.${workername} -d 0"
+  cmd="${BASE_DIR}aleo-miner-${project} -u stratum+tcp://aleo-asia.f2pool.com:4400 -w ${accountname}.${workername}"
   start_service "${cmd}"
 }
 
@@ -102,7 +102,7 @@ function start_6block() {
       exit 1
   fi
 
-  cmd="${BASE_DIR}aleo-miner-${project} --ssl --ssl_server aleo.hk.zk.work:10003 --address ${accountname} --custom_name ${workername}"
+  cmd="${BASE_DIR}aleo-miner-${project} --pool aleo.hk.zk.work:10003 --address ${accountname} --custom_name ${workername}"
   start_service "${cmd}"
 }
 
