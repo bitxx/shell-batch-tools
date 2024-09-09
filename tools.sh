@@ -37,6 +37,8 @@ SSH_PRIVATE_KEY=$SSH_BASE_DIR/id_rsa
 # 服务器ssh对应的私钥，用于服务器远程分发
 SSH_SERVER_PRIVATE_KEY=$BASE_DIR/id_rsa.server
 
+# osmonitor cli服务器列表
+SERVER_LIST_OSMONITOR_CLIENT=$BASE_DIR/server_list_osmonitor_cli.csv
 # aleo服务器列表
 SERVER_LIST_ALEO=$BASE_DIR/server_list_aleo.csv
 
@@ -197,6 +199,63 @@ function batch_run_cmd() {
   return
 }
 
+function batch_osmonitor_client() {
+  if [ ! -e  "${SSH_SERVER_PRIVATE_KEY}" ] || [ ! -e  "${SERVER_LIST_OSMONITOR_CLIENT}" ] ; then
+    echo "请先确保 id_rsa.server、server_list_osmonitor_cli.csv 这2个文件在当前脚本目录位置"
+    return
+  fi
+  chmod -R 600 "${SSH_SERVER_PRIVATE_KEY}"
+
+    # 读取服务器列表文件
+  i=0
+  echo "osmonitor-client服务操作中..."
+  while read -r server; do
+    ((i++))
+    if [ -z "$server" ]; then
+      continue
+    fi
+    ip=$(echo "$server" | cut -d',' -f1)
+    port=$(echo "$server" | cut -d',' -f2)
+    name=$(echo "$server" | cut -d',' -f3)
+    secret=$(echo "$server" | cut -d',' -f4)
+    download_url=$(echo "$server" | cut -d',' -f5)
+    server_url=$(echo "$server" | cut -d',' -f6)
+    proc_names=$(echo "$server" | cut -d',' -f7)
+    proc_names=(${proc_names//_/,})
+
+    echo "正在操作第${i}行，worker => ${name}"
+
+    if [ -z "$ip" ] || [ -z "$port" ] || [ -z "$download_url" ] || [ -z "$secret" ] || [ -z "$name" ] || [ -z "$server_url" ] || [ -z "$proc_names" ] ; then
+      echo "解析格式异常"
+      continue
+    fi
+
+    cmd_install="curl -sSf -L ${SHELL_BASE_URL}/osmonitor/osmonitor_client_install.sh |sudo bash -s -- ${name} ${secret} ${download_url} ${server_url} ${proc_names}"
+    cmd_uninstall="(if [ -e  /lib/systemd/system/osmonitor-client.service ]; then systemctl disable osmonitor-client.service && systemctl stop osmonitor-client.service && rm -f /lib/systemd/system/osmonitor-client.service; fi; if [ -e  /root/osmonitor/ ]; then rm -rf /root/osmonitor/; fi;) && echo 卸载完毕;"
+    cmd=""
+    case "$1" in
+      "install")
+          cmd=${cmd_install}
+          ;;
+      "uninstall")
+          cmd=${cmd_uninstall}
+          ;;
+      *)
+          echo "osmonitor-cli指令操作异常"
+          exit 1
+          ;;
+    esac
+
+    # 服务
+    ssh -n -o StrictHostKeyChecking=no -p"$port" -i "$SSH_SERVER_PRIVATE_KEY" root@"$ip" "${cmd}"
+    if [ $? -ne 0 ]; then
+        echo "命令执行异常"
+    fi
+  done < "${SERVER_LIST_ALEO}"
+  echo "所有服务器操作完毕"
+  return
+}
+
 function batch_aleo() {
   if [ ! -e  "${SSH_SERVER_PRIVATE_KEY}" ] || [ ! -e  "${SERVER_LIST_ALEO}" ] ; then
     echo "请先确保 id_rsa.server、server_list_aleo.csv 这2个文件在当前脚本目录位置"
@@ -280,13 +339,15 @@ function auto_menu() {
   3) ssh_gen_key ;;
   4) batch_ssh_update_key ;;
   5) batch_ssh_update_pwd ;;
-  6) batch_run_cmd ;;
-  7) batch_aleo install ;;
-  8) batch_aleo uninstall ;;
-  9) batch_aleo restart ;;
-  10) batch_aleo stop ;;
-  11) batch_aleo cron_restart ;;
-  12) batch_aleo cron_restart_del ;;
+  6) batch_osmonitor_client install;;
+  7) batch_osmonitor_client uninstall;;
+  8) batch_run_cmd ;;
+  9) batch_aleo install ;;
+  10) batch_aleo uninstall ;;
+  11) batch_aleo restart ;;
+  12) batch_aleo stop ;;
+  13) batch_aleo cron_restart ;;
+  14) batch_aleo cron_restart_del ;;
   *) main_menu ;;
   esac
 }
@@ -302,14 +363,16 @@ function main_menu() {
         echo "3. 新建ssh的rsa密钥"
         echo "4. 批量更新各服务器公钥"
         echo "5. 批量修改各服务器密码"
-        echo "6. 批量执行自定义命令"
-        echo "7. 批量安装aleo服务"
-        echo "8. 批量卸载aleo服务"
-        echo "9. 批量重启aleo服务"
-        echo "10. 批量停止aleo服务"
-        echo "11. 批量配置定时重启aleo任务（每8小时）"
-        echo "12. 批量删除定时重启aleo任务"
-        read -r -p "请输入选项（1-12）: " OPTION
+        echo "6. 批量安装osmonitor-client"
+        echo "7. 批量卸载osmonitor-client"
+        echo "8. 批量执行自定义命令"
+        echo "9. 批量安装aleo服务"
+        echo "10. 批量卸载aleo服务"
+        echo "11. 批量重启aleo服务"
+        echo "12. 批量停止aleo服务"
+        echo "13. 批量配置定时重启aleo任务（每8小时）"
+        echo "14. 批量删除定时重启aleo任务"
+        read -r -p "请输入选项（1-14）: " OPTION
 
         auto_menu "$OPTION"
 

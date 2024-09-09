@@ -61,7 +61,7 @@ fi
 mkdir -p "${BASE_DIR}"
 
 # 下载程序
-wget -O "${BASE_DIR}"aleo-miner-"${project}" "${SERVER_URL}"/aleo-miner-"${project}"
+wget -q -O "${BASE_DIR}"aleo-miner-"${project}" "${SERVER_URL}"/aleo-miner-"${project}"
 if [ $? -ne 0 ]; then
     echo "程序下载异常"
     exit 1
