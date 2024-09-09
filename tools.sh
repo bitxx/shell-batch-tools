@@ -160,7 +160,7 @@ function batch_ssh_update_pwd() {
         echo "命令修改异常"
     fi
   done < "$SERVER_LIST_PWD"
-  echo "所有服务器的私钥已更新完成"
+  echo "所有服务器的密码已更新完成"
   return
 }
 
