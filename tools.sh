@@ -251,7 +251,7 @@ function batch_osmonitor_client() {
     if [ $? -ne 0 ]; then
         echo "命令执行异常"
     fi
-  done < "${SERVER_LIST_ALEO}"
+  done < "${SERVER_LIST_OSMONITOR_CLIENT}"
   echo "所有服务器操作完毕"
   return
 }
