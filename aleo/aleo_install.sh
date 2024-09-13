@@ -12,8 +12,6 @@ case "${project}" in
         ;;
     "oula")
         ;;
-    "apool")
-        ;;
     "6block")
         ;;
     *)
@@ -107,18 +105,6 @@ function start_6block() {
   start_service "${cmd}"
 }
 
-function start_apool() {
-# 通过检查其版本来验证节点是否可运行
-  echo "版本号：" && "${BASE_DIR}"aleo-miner-"${project}" -V
-  if [ $? -ne 0 ]; then
-      echo "aleo-miner-${project}程序异常"
-      exit 1
-  fi
-
-  cmd="${BASE_DIR}aleo-miner-${project} --pool aleo1.hk.apool.io:9090 --account ${accountname} --worker ${workername} -A aleo -g 0"
-  start_service "${cmd}"
-}
-
 function start_service() {
   echo "启动命令：""$1"
   if [ -z "$1" ]; then
@@ -154,8 +140,6 @@ case "${project}" in
         start_f2pool ;;
     "oula")
         start_oula ;;
-    "apool")
-        start_apool ;;
     "6block")
         start_6block ;;
     *)

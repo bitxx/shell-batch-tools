@@ -9,8 +9,7 @@ case "${project}" in
         ;;
     "zkrush")
         ;;
-    "apool")
-        ;;
+
     *)
         echo "项目输入异常，请重试"
         exit 1

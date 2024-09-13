@@ -14,8 +14,6 @@
 7. 批量执行自定义命令
 8. 批量安装 aleo 服务
 9. 批量卸载 aleo 服务
-10. 批量配置定时重启 aleo 任务（每 8 小时）
-11. 批量删除定时重启 aleo 任务
 
 ## 使用说明
 
@@ -24,6 +22,7 @@
 - csv 文件使用时，需要去掉`.tpl`后缀
 - 一些简单命令直接使用`批量执行自定义命令`即可
 - 关于`进程监控`监控功能，需要参考我这个项目[osmonitor](https://github.com/bitxx/osmonitor)，先部署一台 osmonitor-server，然后通过该脚本批量部署`osmonitor-client`到需要监控的设备
+- 目前 aleo 池子支持 f2pool、oula、6block
 
 ### server_list_ip.csv 配置规则
 
@@ -49,10 +48,10 @@ ip,ssh 端口号,下载根地址,池子名称,池子账户,worker 编号
 例如：
 
 ```csv
-192.168.1.2,22,http://172.16.1.2,apool,apool_account_name,apool_worker_name
+192.168.1.2,22,http://172.16.1.2,oula,oula_account_name,oula_worker_name
 ```
 
-说明：下载根地址，是指程序所在 http 服务器的位置，并且服务器程序名称必须按照规则：`aleo-miner-池子名称`来命名，例如：`aleo-miner-apool`
+说明：下载根地址，是指程序所在 http 服务器的位置，并且服务器程序名称必须按照规则：`aleo-miner-池子名称`来命名，例如：`aleo-miner-oula`
 
 ### server_list_osmonitor_cli.csv
 
