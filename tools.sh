@@ -255,18 +255,6 @@ function batch_aleo() {
 
   chmod -R 600 "${SSH_SERVER_PRIVATE_KEY}"
 
-  if [ "$1" = "cron_restart" ]; then
-    (echo "0 */8 * * * cd ${BASE_DIR} && ${BASE_DIR}/tools.sh 7") | crontab -
-    crontab -l
-    echo "定时重启aleo任务配置完毕！"
-    return
-  fi
-  if [ "$1" = "cron_restart_del" ]; then
-    crontab -l | grep -v "${BASE_DIR} && ${BASE_DIR}/tools.sh 7" | crontab -
-    echo "定时重启aleo任务删除完毕！"
-    return
-  fi
-
   # 读取服务器列表文件
   i=0
   echo "aleo服务操作中..."
@@ -326,8 +314,6 @@ function auto_menu() {
   7) batch_run_cmd ;;
   8) batch_aleo install ;;
   9) batch_aleo uninstall ;;
-  10) batch_aleo cron_restart ;;
-  11) batch_aleo cron_restart_del ;;
   *) main_menu ;;
   esac
 }
@@ -347,9 +333,7 @@ function main_menu() {
         echo "7. 批量执行自定义命令"
         echo "8. 批量安装aleo服务"
         echo "9. 批量卸载aleo服务"
-        echo "10. 批量配置定时重启aleo任务（每8小时）"
-        echo "11. 批量删除定时重启aleo任务"
-        read -r -p "请输入选项（1-11）: " OPTION
+        read -r -p "请输入选项（1-9）: " OPTION
 
         auto_menu "$OPTION"
 
