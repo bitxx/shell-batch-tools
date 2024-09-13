@@ -151,7 +151,7 @@ function batch_ssh_update_pwd() {
         echo "命令修改异常"
     fi
   done < "$SERVER_LIST_PWD"
-  echo "所有服务器的私钥已更新完成"
+  echo "所有服务器的密码已更新完成"
   return
 }
 
@@ -242,7 +242,7 @@ function batch_osmonitor_client() {
     if [ $? -ne 0 ]; then
         echo "命令执行异常"
     fi
-  done < "${SERVER_LIST_ALEO}"
+  done < "${SERVER_LIST_OSMONITOR_CLIENT}"
   echo "所有服务器操作完毕"
   return
 }

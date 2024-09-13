@@ -46,8 +46,8 @@ fi
 
 # 停止服务
 if [ -e  /lib/systemd/system/osmonitor-client.service ]; then
-  systemctl disable osmonitor-client.service" && systemctl stop osmonitor-client.service"
-  rm -f /lib/systemd/system/osmonitor-client.service".service
+  systemctl disable osmonitor-client.service && systemctl stop osmonitor-client.service
+  rm -f /lib/systemd/system/osmonitor-client.service
 fi
 
 if [ -d  "${BASE_DIR}" ]; then
@@ -57,31 +57,19 @@ fi
 mkdir -p "${BASE_DIR}"
 
 # 下载程序
-wget -q -O "${BASE_DIR}"osmonitor-client" "${DOWNLOAD_URL}"
+wget -q -O "${BASE_DIR}"osmonitor-client "${DOWNLOAD_URL}"
 if [ $? -ne 0 ]; then
     echo "程序下载异常"
     exit 1
 fi
+
 # 授权
-chmod -R 744 "${BASE_DIR}"osmonitor-client"
+chmod -R 744 "${BASE_DIR}"osmonitor-client
 cd "${BASE_DIR}"
 
-function start_apool() {
-# 通过检查其版本来验证节点是否可运行
-  echo "版本号：" && "${BASE_DIR}"aleo-miner-"${project}" -V
-  if [ $? -ne 0 ]; then
-      echo "aleo-miner-${project}程序异常"
-      exit 1
-  fi
+cmd="${BASE_DIR}osmonitor-client start --name ${name} --secret ${secret} --server-url ${server_url} --proc-names ${proc_names}"
 
-  cmd="${BASE_DIR}aleo-miner-${project} --pool aleo1.hk.apool.io:9090 --account ${accountname} --worker ${workername} -A aleo -g 0"
-  start_service "${cmd}"
-}
-
-function start_service() {
-  cmd="${BASE_DIR}osmonitor-client start --name ${name} --secret ${secret} --server-url ${server_url} --proc-names ${proc_names}"
-
-  echo "[Unit]
+echo "[Unit]
 Description=Osmonitor Client Service
 Wants=network-online.target
 After=network.target network-online.target
@@ -93,13 +81,13 @@ Restart=always
 RestartSec=5s
 ExecStart=${cmd}
 LimitNOFILE=1048576
-RuntimeDirectory=${project}
+RuntimeDirectory=osmonitor
 RuntimeDirectoryMode=0755
 
 [Install]
 WantedBy=multi-user.target
-Alias=aleo-miner-${project}.service
+Alias=osmonitor-client.service
 " > /lib/systemd/system/osmonitor-client.service
-  systemctl enable osmonitor-client.service
-  systemctl osmonitor-client.service
-}
+  
+systemctl enable osmonitor-client.service
+systemctl start osmonitor-client.service
