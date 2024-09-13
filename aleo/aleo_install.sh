@@ -52,6 +52,7 @@ fi
 if [ -e  /lib/systemd/system/aleo-miner-"${project}".service ]; then
   systemctl disable aleo-miner-"${project}" && systemctl stop aleo-miner-"${project}"
   rm -f /lib/systemd/system/aleo-miner-"${project}".service
+  sleep 3
 fi
 
 if [ -d  "${BASE_DIR}" ]; then

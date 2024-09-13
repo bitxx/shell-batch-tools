@@ -42,15 +42,6 @@ SERVER_LIST_OSMONITOR_CLIENT=$BASE_DIR/server_list_osmonitor_cli.csv
 # aleo服务器列表
 SERVER_LIST_ALEO=$BASE_DIR/server_list_aleo.csv
 
-function update_tools_shell() {
-  curl -H "Cache-Control: no-cache" -# -o "$BASE_DIR"/tools.sh "${SHELL_BASE_URL}"tools.sh
-  if [ $? -ne 0 ]; then
-      echo "脚本更新异常"
-      exit 1
-  fi
-  echo "脚本更新完毕"
-}
-
 function ssl_gen_key() {
   if [ -e  "$SSH_PRIVATE_KEY" ]; then
       echo "检测到当前脚本目录已经存在id_rsa，继续执行则会覆盖该文件，是否继续？[Y/N]"
@@ -300,8 +291,6 @@ function batch_aleo() {
 
     cmd_install="curl -sSf -L ${SHELL_BASE_URL}/aleo/aleo_install.sh |sudo bash -s -- ${download_url} ${project} ${accountname} ${workername}"
     cmd_uninstall="(if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl disable aleo-miner-${project} && systemctl stop aleo-miner-${project} && rm -f /lib/systemd/system/aleo-miner-${project}.service; fi; if [ -d  /root/aleo/${project}/ ]; then rm -rf /root/aleo/${project}/; fi;) && echo 卸载完毕;"
-    cmd_restart="if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl restart aleo-miner-${project}; else echo 服务不存在; fi;"
-    cmd_stop="if [ -e  /lib/systemd/system/aleo-miner-${project}.service ]; then systemctl stop aleo-miner-${project}; else echo 服务不存在; fi;"
     cmd=""
     case "$1" in
       "install")
@@ -309,12 +298,6 @@ function batch_aleo() {
           ;;
       "uninstall")
           cmd=${cmd_uninstall}
-          ;;
-      "restart")
-          cmd=${cmd_restart}
-          ;;
-      "stop")
-          cmd=${cmd_stop}
           ;;
       *)
           echo "aleo指令操作异常"
@@ -334,20 +317,17 @@ function batch_aleo() {
 # 执行菜单
 function auto_menu() {
   case $1 in
-  1) update_tools_shell ;;
-  2) ssl_gen_key ;;
-  3) ssh_gen_key ;;
-  4) batch_ssh_update_key ;;
-  5) batch_ssh_update_pwd ;;
-  6) batch_osmonitor_client install;;
-  7) batch_osmonitor_client uninstall;;
-  8) batch_run_cmd ;;
-  9) batch_aleo install ;;
-  10) batch_aleo uninstall ;;
-  11) batch_aleo restart ;;
-  12) batch_aleo stop ;;
-  13) batch_aleo cron_restart ;;
-  14) batch_aleo cron_restart_del ;;
+  1) ssl_gen_key ;;
+  2) ssh_gen_key ;;
+  3) batch_ssh_update_key ;;
+  4) batch_ssh_update_pwd ;;
+  5) batch_osmonitor_client install;;
+  6) batch_osmonitor_client uninstall;;
+  7) batch_run_cmd ;;
+  8) batch_aleo install ;;
+  9) batch_aleo uninstall ;;
+  10) batch_aleo cron_restart ;;
+  11) batch_aleo cron_restart_del ;;
   *) main_menu ;;
   esac
 }
@@ -358,21 +338,18 @@ function main_menu() {
         clear
         echo "退出脚本，请按键盘ctrl c退出即可"
         echo "请选择要执行的操作:"
-        echo "1. 更新脚本"
-        echo "2. 新建ssl自有证书(cert.key和cert.pem)"
-        echo "3. 新建ssh的rsa密钥"
-        echo "4. 批量更新各服务器公钥"
-        echo "5. 批量修改各服务器密码"
-        echo "6. 批量安装osmonitor-client"
-        echo "7. 批量卸载osmonitor-client"
-        echo "8. 批量执行自定义命令"
-        echo "9. 批量安装aleo服务"
-        echo "10. 批量卸载aleo服务"
-        echo "11. 批量重启aleo服务"
-        echo "12. 批量停止aleo服务"
-        echo "13. 批量配置定时重启aleo任务（每8小时）"
-        echo "14. 批量删除定时重启aleo任务"
-        read -r -p "请输入选项（1-14）: " OPTION
+        echo "1. 新建ssl自有证书(cert.key和cert.pem)"
+        echo "2. 新建ssh的rsa密钥"
+        echo "3. 批量更新各服务器公钥"
+        echo "4. 批量修改各服务器密码"
+        echo "5. 批量安装osmonitor-client"
+        echo "6. 批量卸载osmonitor-client"
+        echo "7. 批量执行自定义命令"
+        echo "8. 批量安装aleo服务"
+        echo "9. 批量卸载aleo服务"
+        echo "10. 批量配置定时重启aleo任务（每8小时）"
+        echo "11. 批量删除定时重启aleo任务"
+        read -r -p "请输入选项（1-11）: " OPTION
 
         auto_menu "$OPTION"
 
