@@ -309,9 +309,9 @@ function auto_menu() {
   2) ssh_gen_key ;;
   3) batch_ssh_update_key ;;
   4) batch_ssh_update_pwd ;;
-  5) batch_osmonitor_client install;;
-  6) batch_osmonitor_client uninstall;;
-  7) batch_run_cmd ;;
+  5) batch_run_cmd ;;
+  6) batch_osmonitor_client install;;
+  7) batch_osmonitor_client uninstall;;
   8) batch_aleo install ;;
   9) batch_aleo uninstall ;;
   *) main_menu ;;
@@ -328,9 +328,9 @@ function main_menu() {
         echo "2. 新建ssh的rsa密钥"
         echo "3. 批量更新各服务器公钥"
         echo "4. 批量修改各服务器密码"
-        echo "5. 批量安装osmonitor-client"
-        echo "6. 批量卸载osmonitor-client"
-        echo "7. 批量执行自定义命令"
+        echo "5. 批量执行自定义命令"
+        echo "6. 批量安装osmonitor-client"
+        echo "7. 批量卸载osmonitor-client"
         echo "8. 批量安装aleo服务"
         echo "9. 批量卸载aleo服务"
         read -r -p "请输入选项（1-9）: " OPTION
